@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ComfyChroma - Colorful Backdrop using Twitch Channel Points!</title>
+		<style>
+			body {
+				width: 100%;
+				height: 100%;
+			}
+		</style>
+		<script src="web/comfy.min.js"></script>
+	</head>
+	<body>
+		<script>
+			const params = new URLSearchParams( location.search );
+			let colors = params.get( "colors" ) ? params.get( "colors" ).split( "," ).map( x => "#" + x.trim() ) : [ "#e0414e", "#1DAF99", "#CC0000", "#c773ff", "#848482", "#8f8fbc", "#f4c2c2", "#FFC300", "#DAF7A6", "#2CCB1D", "#36C6DA", "#5FB6C2", "##5F7BC2", "#8C5FC2", "#C25FBB", "#C25F97", "#A6C899", "#FEAD15" ];
+			let displayTime = params.get( "time" ) || 0;
+			let rewardId = params.get( "reward" );
+			let displayTimer = null;
+			function setRandomColor() {
+				document.body.style.backgroundColor = colors[ Math.floor( colors.length * Math.random() ) ];
+				if( displayTime > 0 ) {
+					if( displayTimer ) {
+						clearTimeout( displayTimer );
+					}
+					displayTimer = setTimeout( () => {
+						document.body.style.backgroundColor = "#00000000";
+					}, displayTime * 1000 );
+				}
+			}
+
+			ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
+				if( command === "color" &&
+					( !rewardId || flags.broadcaster || flags.mod ) ) {
+						console.log( "test" );
+					setRandomColor();
+				}
+				if( flags.customReward && extra.customRewardId === rewardId ) {
+					setRandomColor();
+				}
+			};
+			ComfyJS.onChat = ( user, message, flags, self, extra ) => {
+				if( flags.customReward && extra.customRewardId === rewardId ) {
+					setRandomColor();
+				}
+			};
+			ComfyJS.Init( params.get( "channel" ) );
+
+			if( !params.get( "channel" ) ) {
+				setRandomColor();
+			}
+		</script>
+	</body>
+</html>

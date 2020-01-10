@@ -1,0 +1,30 @@
+{
+  "name": "comfychroma",
+  "version": "1.0.0",
+  "description": "Colorful Backdrop using Twitch Channel Points!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/instafluff/ComfyChroma.git"
+  },
+  "keywords": [
+    "Color",
+    "Chroma",
+    "Twitch",
+    "Backdrop",
+    "Points",
+    "Instafluff"
+  ],
+  "author": "Instafluff",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/instafluff/ComfyChroma/issues"
+  },
+  "homepage": "https://github.com/instafluff/ComfyChroma#readme",
+  "dependencies": {
+    "webwebweb": "^1.1.10"
+  }
+}
