@@ -8,7 +8,8 @@
 				height: 100%;
 			}
 		</style>
-		<script src="web/comfy.min.js"></script>
+		<script type='text/javascript' src="web/comfy.min.js"></script>
+		<script type='text/javascript' src='web/tinycolor.js'></script>
 	</head>
 	<body>
 		<script>
@@ -17,8 +18,15 @@
 			let displayTime = params.get( "time" ) || 0;
 			let rewardId = params.get( "reward" );
 			let displayTimer = null;
-			function setRandomColor() {
-				document.body.style.backgroundColor = colors[ Math.floor( colors.length * Math.random() ) ];
+			function setColor( color ) {
+				var color = tinycolor( color );
+				if( color.isValid() ) {
+					document.body.style.backgroundColor = color.toHexString();
+				}
+				else {
+					document.body.style.backgroundColor = colors[ Math.floor( colors.length * Math.random() ) ];
+				}
+
 				if( displayTime > 0 ) {
 					if( displayTimer ) {
 						clearTimeout( displayTimer );
@@ -33,21 +41,21 @@
 				if( command === "color" &&
 					( !rewardId || flags.broadcaster || flags.mod ) ) {
 						console.log( "test" );
-					setRandomColor();
+					setColor( message );
 				}
 				if( flags.customReward && extra.customRewardId === rewardId ) {
-					setRandomColor();
+					setColor( message );
 				}
 			};
 			ComfyJS.onChat = ( user, message, flags, self, extra ) => {
 				if( flags.customReward && extra.customRewardId === rewardId ) {
-					setRandomColor();
+					setColor( message );
 				}
 			};
 			ComfyJS.Init( params.get( "channel" ) );
 
 			if( !params.get( "channel" ) ) {
-				setRandomColor();
+				setColor();
 			}
 		</script>
 	</body>
