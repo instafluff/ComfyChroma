@@ -21,7 +21,7 @@
 			function setColor( color ) {
 				var color = tinycolor( color );
 				if( color.isValid() ) {
-					document.body.style.backgroundColor = color.toHexString();
+					document.body.style.backgroundColor = color.toHex8String();
 				}
 				else {
 					document.body.style.backgroundColor = colors[ Math.floor( colors.length * Math.random() ) ];
