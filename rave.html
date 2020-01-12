@@ -15,46 +15,72 @@
 		<script>
 			const params = new URLSearchParams( location.search );
 			let colors = params.get( "colors" ) ? params.get( "colors" ).split( "," ).map( x => "#" + x.trim() ) : [ "#e0414e", "#1DAF99", "#CC0000", "#c773ff", "#848482", "#8f8fbc", "#f4c2c2", "#FFC300", "#DAF7A6", "#2CCB1D", "#36C6DA", "#5FB6C2", "##5F7BC2", "#8C5FC2", "#C25FBB", "#C25F97", "#A6C899", "#FEAD15" ];
-			let displayTime = parseInt( params.get( "time" ) || 0 );
+			let displayTime = parseInt( params.get( "time" ) || 5 );
 			let rewardId = params.get( "reward" );
 			let displayTimer = null;
+			let isEnabled = false;
+			let baseColor = tinycolor( "6cfff2" ); //tinycolor.random(); //b2f81c
+			// console.log( baseColor.toHexString() );
+			let raveTimer = setInterval( () => {
+				if( isEnabled ) {
+					baseColor.spin( 20 );
+					setColor( baseColor.toHexString() );
+				}
+				else {
+					document.body.style.backgroundColor = "#00000000";
+				}
+			}, 50 );
+
 			function setColor( color ) {
 				var color = tinycolor( color );
 				if( color.isValid() ) {
 					document.body.style.backgroundColor = color.toHexString();
 				}
 				else {
-					document.body.style.backgroundColor = colors[ Math.floor( colors.length * Math.random() ) ];
-				}
-
-				if( displayTime > 0 ) {
-					if( displayTimer ) {
-						clearTimeout( displayTimer );
-					}
-					displayTimer = setTimeout( () => {
-						document.body.style.backgroundColor = "#00000000";
-					}, displayTime * 1000 );
+					document.body.style.backgroundColor = tinycolor.random();
 				}
 			}
 
+			function startRave( time ) {
+				if( displayTimer ) {
+					clearTimeout( displayTimer );
+				}
+				isEnabled = true;
+				displayTimer = setTimeout( () => {
+					isEnabled = false;
+				}, time * 1000 );
+			}
+
 			ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
-				if( command === "color" &&
+				if( command === "rave" &&
 					( !rewardId || flags.broadcaster || flags.mod ) ) {
-					setColor( message );
+					startRave( displayTime );
 				}
 				if( flags.customReward && extra.customRewardId === rewardId ) {
-					setColor( message );
+					startRave( displayTime );
 				}
 			};
 			ComfyJS.onChat = ( user, message, flags, self, extra ) => {
 				if( flags.customReward && extra.customRewardId === rewardId ) {
-					setColor( message );
+					startRave( displayTime );
 				}
+			};
+			ComfyJS.onSub = ( user, message, subTierInfo, extra ) => {
+				startRave( displayTime );
+			};
+			ComfyJS.onResub = ( user, message, streamMonths, cumulativeMonths, subTierInfo, extra ) => {
+				startRave( displayTime );
+			};
+			ComfyJS.onSubGift = ( gifterUser, streakMonths, recipientUser, senderCount, subTierInfo, extra ) => {
+				startRave( displayTime );
+			};
+			ComfyJS.onSubMysteryGift = ( gifterUser, numbOfSubs, senderCount, subTierInfo, extra ) => {
+				startRave( displayTime );
 			};
 			ComfyJS.Init( params.get( "channel" ) );
 
 			if( !params.get( "channel" ) ) {
-				setColor();
+				startRave( displayTime );
 			}
 		</script>
 	</body>
