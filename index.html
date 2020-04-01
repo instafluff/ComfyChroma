@@ -48,14 +48,23 @@
 			ComfyJS.onCommand = ( user, command, message, flags, extra ) => {
 				if( command === "color" &&
 					( !rewardId || flags.broadcaster || flags.mod ) ) {
+					if( message.toLowerCase() === "original" ) {
+						message = "#1c4867";
+					}
 					setColor( message );
 				}
 				if( flags.customReward && extra.customRewardId === rewardId ) {
+					if( message.toLowerCase() === "original" ) {
+						message = "#1c4867";
+					}
 					setColor( message );
 				}
 			};
 			ComfyJS.onChat = ( user, message, flags, self, extra ) => {
 				if( flags.customReward && extra.customRewardId === rewardId ) {
+					if( message.toLowerCase() === "original" ) {
+						message = "#1c4867";
+					}
 					setColor( message );
 				}
 			};
